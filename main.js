@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, screen, Notification  } = require('electron')
 const path = require('path');
 const { clearInterval } = require('timers');
 // const OBSWebSocket = require('obs-websocket-js');
@@ -20,7 +20,8 @@ function createWindow () {
       contextIsolation: true, // protect against prototype pollution
       enableRemoteModule: false, // turn off remote
     },
-    //transparent: true,
+    type: 'toolbar',
+    transparent: true,
     frame: false,
     autoHideMenuBar: true,
     resizable:false,
@@ -34,9 +35,17 @@ function createWindow () {
 
     // TODO set fullscreen on top of everything
 
-    win.setAlwaysOnTop(true, "screen-saver");
+    win.setAlwaysOnTop(true, "screen-saver", 0);
     win.setFullScreenable(false);
-    win.setVisibleOnAllWorkspaces(true, {visibleOnFullScreen: true});
+    win.setVisibleOnAllWorkspaces(true);
+
+    win.on('minimize', (event) => {
+      console.log('minimzed');
+
+    });
+
+    // todo notif based?
+
     // TODO set icon
     // win.setIcon('./raccon_record.jpeg')
 
@@ -75,8 +84,16 @@ function createWindow () {
     createWindow()
 
     app.on('activate', function () {
-      if (BrowserWindow.getAllWindows().length === 0) createWindow()
+      if (BrowserWindow.getAllWindows().length === 0) { createWindow() }
     })
+
+    const NOTIFICATION_TITLE = 'Basic Notification'
+    const NOTIFICATION_BODY = 'Notification from the Main process'
+
+    function showNotification () {
+      new Notification({ title: NOTIFICATION_TITLE, body: NOTIFICATION_BODY }).show()
+    }
+    showNotification();
   })
 
   app.on('window-all-closed', function () {
