@@ -1,0 +1,18 @@
+{
+  "name": "obs-status-electron",
+  "version": "1.0.0",
+  "description": "An electron app that displays obs status for recording",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jan",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^15.3.0"
+  },
+  "dependencies": {
+    "obs-websocket-js": "^4.0.3"
+  }
+}
