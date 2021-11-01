@@ -2,7 +2,10 @@
   "name": "obs-status-electron",
   "version": "1.0.0",
   "description": "An electron app that displays obs status for recording",
-  "main": "main.js",
+  "hideProp": {
+    "main": "main.js"
+  },
+  "main": "./.webpack/main",
   "scripts": {
     "start": "electron-forge start",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,37 +20,15 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.61",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
     "@electron-forge/maker-zip": "^6.0.0-beta.61",
-    "electron": "^15.3.0"
+    "@electron-forge/plugin-webpack": "^6.0.0-beta.61",
+    "@vercel/webpack-asset-relocator-loader": "^1.7.0",
+    "css-loader": "^6.5.0",
+    "electron": "15.3.0",
+    "node-loader": "^2.0.0",
+    "style-loader": "^3.3.1"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
     "obs-websocket-js": "^4.0.3"
-  },
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "obs_status_electron"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
   }
 }
