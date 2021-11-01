@@ -1,37 +1,40 @@
 const OBSWebSocket = require('obs-websocket-js');
 const { contextBridge, ipcRenderer } = require('electron')
 
-const obs = new OBSWebSocket();
-// obs.connect({
-//     address: 'localhost:4444'
-// })
-// .then(() => {
-//     console.log(`Success! We're connected & authenticated.`);
+let obs;
+let obsConnected = false;
 
-//     return obs.send('GetSceneList');
-// })
-// .then(data => {
-//     console.log(`${data.scenes.length} Available Scenes!`);
+function connectToObs() {
+  obs = new OBSWebSocket();
+  obs.connect({
+      address: 'localhost:4444'
+  })
+  .then(() => {
+      console.log(`Success! We're connected & authenticated.`);
+      obsConnected = true;
+  })
+  .catch(err => { // Promise convention dicates you have a catch on every chain.
+      console.log(err);
+  });
+}
 
-//     data.scenes.forEach(scene => {
-//         if (scene.name !== data.currentScene) {
-//             console.log(`Found a different scene! Switching to Scene: ${scene.name}`);
-
-//             obs.send('SetCurrentScene', {
-//                 'scene-name': scene.name
-//             });
-//         }
-//     });
-// })
-// .catch(err => { // Promise convention dicates you have a catch on every chain.
-//     console.log(err);
-// });
+connectToObs();
 
 contextBridge.exposeInMainWorld(
-    'obs', { 
+    'obs', {
         // expose the required apis
         on: (eventName, callback) => {
             obs.on(eventName, callback);
+        },
+        disconnect: () => {
+          obs.disconnect();
+        },
+        isConnected: () => {
+          console.log('obs.isConnected: ' + obsConnected);
+          return obsConnected;
+        },
+        connect: () => {
+          connectToObs();
         }
      }
 );
@@ -39,7 +42,6 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
     'ipcRenderer', {
         invoke: (name, args) => {
-            console.log('preload.invoke')
             ipcRenderer.invoke(name, args);
         }
     }

@@ -16,6 +16,10 @@ p {margin-top: 10px; color: rgba(255,255,255,0.4);}
   background-size: cover
 }
 
+.recording {
+  background: #FF0000
+}
+
 img {
     max-width: 100%;
     height: auto;

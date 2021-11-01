@@ -1,31 +1,28 @@
 const { app, BrowserWindow, ipcMain, screen, Notification  } = require('electron')
 const path = require('path');
 const { clearInterval } = require('timers');
-// const OBSWebSocket = require('obs-websocket-js');
-// const obs = new OBSWebSocket();
-
-// TODO setup obs and renderer per
-// https://stackoverflow.com/questions/44391448/electron-require-is-not-defined example wiht 59 and preload
-
 
 let win;
 
+// TODO Tray
+
 function createWindow () {
   win = new BrowserWindow({
-    width: 80,
-    height: 80,
+    width: 800,
+    height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false, // is default value after Electron v5
       contextIsolation: true, // protect against prototype pollution
       enableRemoteModule: false, // turn off remote
     },
-    type: 'toolbar',
-    transparent: true,
-    frame: false,
+    // Desktop has icon
+    // type: 'toolbar',
+    // transparent: true,
+    // frame: false,
     autoHideMenuBar: true,
-    resizable:false,
-    minimizable: false,
+    // resizable:false,
+    // minimizable: false,
     alwaysOnTop: true
   })
   
@@ -35,49 +32,68 @@ function createWindow () {
 
     // TODO set fullscreen on top of everything
 
-    win.setAlwaysOnTop(true, "screen-saver", 0);
+    win.setAlwaysOnTop(true, "screen-saver");
     win.setFullScreenable(false);
     win.setVisibleOnAllWorkspaces(true);
 
     win.on('minimize', (event) => {
       console.log('minimzed');
-
     });
 
+    // todo request PNG plox
+    const iconImg = path.join(__dirname, 'images', 'raccoon_logo.jpeg')
+    win.setIcon(iconImg);
+
+    // TODO display notifications settings
     // todo notif based?
 
-    // TODO set icon
-    // win.setIcon('./raccon_record.jpeg')
-
-    // TODO browserify build shit
+    // TODO browserify build
 }
-
-
 
   let trayRecordStatus;
   let trayRecordAnimationId;
+
+  function trayStatusNotRecording() {
+    win.setOverlayIcon(null, 'RecordingStateAnimation.off');
+    trayRecordStatus = false;
+  }
+
+  function trayStatusRecording() {
+    win.setOverlayIcon('./images/red_circle_md.png', 'RecordingStateAnimation.on');
+    trayRecordStatus = true;
+  }
+
+  function windowStatusRecording() {
+    win.setOpacity(1.0);
+  }
+
+  function windowStatusNotRecording() {
+    win.setOpacity(0.1);
+  }
 
   function startRecordingAnimation() {
     trayRecordAnimationId = setInterval(frame, 500);
     function frame() {
       if(trayRecordStatus) {
-        win.setOverlayIcon(null, 'RecordingStateAnimation.off');
-        trayRecordStatus = false;
+        trayStatusNotRecording();        
       }
       else {
-        win.setOverlayIcon('./red-circle-md.png', 'RecordingStateAnimation.on');
-        trayRecordStatus = true;
+        trayStatusRecording();
       }
     }
 }
 
   // handler points
   ipcMain.handle('recordingStarted', () => {
+    trayStatusRecording();
     startRecordingAnimation();
+    // win.setOpacity(1.0);
   });
 
   ipcMain.handle('recordingStopped', () => {
     clearInterval(trayRecordAnimationId);
+    trayStatusNotRecording();
+    // win.setOpacity(0.1);
   });
 
   app.whenReady().then(() => {
@@ -86,18 +102,10 @@ function createWindow () {
     app.on('activate', function () {
       if (BrowserWindow.getAllWindows().length === 0) { createWindow() }
     })
-
-    const NOTIFICATION_TITLE = 'Basic Notification'
-    const NOTIFICATION_BODY = 'Notification from the Main process'
-
-    function showNotification () {
-      new Notification({ title: NOTIFICATION_TITLE, body: NOTIFICATION_BODY }).show()
-    }
-    showNotification();
   })
 
   app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') app.quit()
+    if (process.platform !== 'darwin') { app.quit() }
+    // TODO figure out disconnect
+    // window.obs.disconnect();
   })
-
-
