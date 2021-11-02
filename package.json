@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
+    "node-polyfill-webpack-plugin": "^1.1.4",
     "obs-websocket-js": "^4.0.3"
   }
 }

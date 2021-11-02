@@ -1,15 +1,9 @@
 module.exports = {
   plugins: [
     ['@electron-forge/plugin-webpack', {
-      renderer: {
-        // only load content we host
-        nodeIntegration: true, 
-        config: './webpack.renderer.config.js',
-        entryPoints: [/* entry point config */]
-      },
       mainConfig: './webpack.main.config.js',
-      // other Webpack plugin config...
       renderer: {
+        nodeIntegration: true,
         config: "./webpack.renderer.config.js",
         entryPoints: [
           {

@@ -7,11 +7,15 @@ export default class OBSDispatcher {
   // connect to OBS
   constructor() {
     // TODO connect to OBS
-    this.listeners = []
+    this.listeners = [];
+    console.log('Init: ' + this.listeners);
   }
 
   registerListener(listener) {
-    this.listeners.push(listener);
+    console.log('Registering: ' + listener);
+
+    var newLen = this.listeners.push(listener);
+    console.log(newLen);
   }
 
   deregisterListener(listener) {
@@ -19,6 +23,10 @@ export default class OBSDispatcher {
   }
 
   dispatch() {
-    console.log('Dispatching ' + new Date());
+    console.log('Dispatching @' + new Date());
+    for(const listener of this.listeners) {
+        listener.notify();
+    }
+    
   }
 }

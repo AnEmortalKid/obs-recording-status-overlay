@@ -38,6 +38,12 @@ sd.onStop();
 
 // window.obsDispatcher.registerListener(listener);
 
-ipcRenderer.handle('onRecordingStarted', (e) => {
-  console.log('ipcRenderer.onRecordingStarted');
-})
+// window.obsDispatcher.registerListener({ notify: () => console.log('renderer.dispatched')});
+
+ipcRenderer.on('ping', (event, message) => {
+  console.log('inRenderer: ' + message);
+});
+
+// ipcRenderer.handle('onRecordingStarted', (e) => {
+//   console.log('ipcRenderer.onRecordingStarted');
+// })

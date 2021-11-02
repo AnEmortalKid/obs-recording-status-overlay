@@ -1,22 +1,26 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
 import StatusDisplayer from './status/statusDisplayer';
 import TrayStatusDisplayer from './status/trayStatusDisplayer';
+
+import OBSDispatcher from './obs/obsDispatcher';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
 
+const obsDispatcher = new OBSDispatcher();
+
+let mainWindow;
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-      // only ever load content from ourselves
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false
     }
   });
 
@@ -35,7 +39,19 @@ const createWindow = () => {
   var tsd = new TrayStatusDisplayer();
   tsd.onStart();
 
-  // setInterval(obsDispatcher.dispatch, 1000);
+  const mwListener = {
+    notify: () => {
+      mainWindow.webContents.send('ping', 'from main');
+    }
+  };
+
+  obsDispatcher.registerListener(mwListener);
+  
+  function dispatcher() {
+    obsDispatcher.dispatch();
+  }
+
+  setInterval(dispatcher, 2000);
 };
 
 // This method will be called when Electron has finished
