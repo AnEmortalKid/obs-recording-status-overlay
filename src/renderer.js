@@ -28,9 +28,16 @@
 
 import './index.css';
 import StatusDisplayer from './status/statusDisplayer'
+const { ipcRenderer } = require('electron');
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
 
 var sd = new StatusDisplayer();
 sd.onStart();
 sd.onStop();
+
+// window.obsDispatcher.registerListener(listener);
+
+ipcRenderer.handle('onRecordingStarted', (e) => {
+  console.log('ipcRenderer.onRecordingStarted');
+})

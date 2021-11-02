@@ -2,7 +2,8 @@ module.exports = {
   plugins: [
     ['@electron-forge/plugin-webpack', {
       renderer: {
-        nodeIntegration: true, // defaults to false
+        // only load content we host
+        nodeIntegration: true, 
         config: './webpack.renderer.config.js',
         entryPoints: [/* entry point config */]
       },
@@ -14,7 +15,10 @@ module.exports = {
           {
             html: "./src/index.html",
             js: "./src/renderer.js",
-            name: "main_window"
+            name: "main_window",
+            preload: {
+              js: './src/preload.js'
+            }
           }
         ]
       }
