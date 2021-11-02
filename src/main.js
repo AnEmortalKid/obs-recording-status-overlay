@@ -3,13 +3,24 @@ import StatusDisplayer from './status/statusDisplayer';
 import TrayStatusDisplayer from './status/trayStatusDisplayer';
 
 import OBSDispatcher from './obs/obsDispatcher';
+import MainOBSListener from './obs/mainObsListener';
+import RendererOBSListener from './obs/rendererObsListener';
+import { OBSEvents } from './obs/obsListener';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
 
-const obsDispatcher = new OBSDispatcher();
+
+// TODO load settings
+const appSettings = {
+  obs: {
+    port: "4444"
+  }
+}
+
+const obsDispatcher = new OBSDispatcher(appSettings);
 
 let mainWindow;
 const createWindow = () => {
@@ -36,22 +47,22 @@ const createWindow = () => {
   sd.onStart();
   sd.onStop();
 
-  var tsd = new TrayStatusDisplayer();
-  tsd.onStart();
+  //const trayStatus = new TrayStatusDisplayer(mainWindow);
 
-  const mwListener = {
-    notify: () => {
-      mainWindow.webContents.send('ping', 'from main');
-    }
-  };
+  const mainListener = new MainOBSListener(mainWindow);
+  const renderListener = new RendererOBSListener(mainWindow.webContents);
 
-  obsDispatcher.registerListener(mwListener);
+  obsDispatcher.registerListener(mainListener);
+  obsDispatcher.registerListener(renderListener);
   
+  // play function atm
   function dispatcher() {
-    obsDispatcher.dispatch();
+    obsDispatcher.dispatch(OBSEvents.RecordingStarted);
   }
 
-  setInterval(dispatcher, 2000);
+  // setInterval(dispatcher, 2000);
+
+  obsDispatcher.initialize();
 };
 
 // This method will be called when Electron has finished
