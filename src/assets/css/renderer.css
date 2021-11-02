@@ -5,6 +5,7 @@ body {
   padding: 2rem;
 }
 
+/* todo fix lefty left instead of center */
 .container {
   display: flex;
   align-items: center;
@@ -22,4 +23,13 @@ img {
 .text {
   font-size: 20px;
   padding-left: 20px;
+}
+
+#circle {
+  width: 50px;
+  height: 50px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+  background: red;
 }

@@ -35,17 +35,11 @@ const createWindow = () => {
     }
   });
 
-  console.log('PreloadEntry: ' + MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY);
-
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
-
-  var sd = new StatusDisplayer();
-  sd.onStart();
-  sd.onStop();
 
   //const trayStatus = new TrayStatusDisplayer(mainWindow);
 
@@ -56,13 +50,14 @@ const createWindow = () => {
   obsDispatcher.registerListener(renderListener);
   
   // play function atm
-  function dispatcher() {
-    obsDispatcher.dispatch(OBSEvents.RecordingStarted);
-  }
+  // function dispatcher() {
+  //   obsDispatcher.dispatch(OBSEvents.RecordingStarted);
+  // }
 
   // setInterval(dispatcher, 2000);
 
-  obsDispatcher.initialize();
+  // TODO this needs to move to work pool on
+  // obsDispatcher.initialize();
 };
 
 // This method will be called when Electron has finished
@@ -87,9 +82,6 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.handle('onRecordingStarted', (e) => {
-  console.log('handle.onRecordingStarted');
-})
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

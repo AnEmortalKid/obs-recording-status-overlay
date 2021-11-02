@@ -3,13 +3,21 @@
   <head>
     <meta charset="UTF-8">
     <title>Hello World!</title>
+    <link rel="stylesheet" href="/css/renderer.css" />
 
   </head>
   <body>
     <h1>💖 Hello World!</h1>
     <p>Welcome to your Electron application.</p>
     <hr/>
-    <p id="statusText">00:00:00</p>
+    <div class="container">
+      <div class="image">
+        <div id="circle"></div>
+      </div>
+      <div class="text">
+        <p id="statusText">00:00:00</p>
+      </div>
+    </div>
     <hr/>
   </body>
 </html>
