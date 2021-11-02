@@ -1,5 +1,7 @@
 # obs-status-electron
 
+An overlay that displays the status of [OBS](https://obsproject.com/) recording events.
+
 
 ## Requirements
 
