@@ -21,11 +21,20 @@ function toDurationString(seconds) {
   return hoursStr + ":" + minStr + ":" + secStr;
 }
 
-export default class StatusDisplayer {
+const containerId = "timer-overlay"
+const textId = "timer-overlay-statusText"
+
+/**
+ * Displayer that tracks the time spent recording as well as an indication of that recording
+ */
+export default class RecordingTimerStatusDisplayer {
 
   constructor() {
     this.timerSeconds = 0;
     this.timerIntervalId = null;
+    
+    // set to visible
+    document.getElementById(containerId).hidden = false;
   }
 
   timerTick() {
@@ -34,7 +43,7 @@ export default class StatusDisplayer {
   }
 
   updateLabel() {
-    document.getElementById("statusText").textContent = toDurationString(this.timerSeconds);
+    document.getElementById(textId).textContent = toDurationString(this.timerSeconds);
   }
 
   onStart() {

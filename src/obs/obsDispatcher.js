@@ -25,7 +25,7 @@ export default class OBSDispatcher {
     this.obsInternal.socket = new OBSWebSocket();
     const obsSocket = this.obsInternal.socket;
     obsSocket.connect({
-        address: 'localhost:' + this.obsSettings.port
+        address: 'localhost:' + this.obsSettings.server.port
     })
     .then(() => {
         console.log(`Success! We're connected & authenticated.`);
@@ -52,8 +52,10 @@ export default class OBSDispatcher {
         // TODO track Heartbeat in case it crashed
         // obsSocket.on('Heartbeat')
     })
-    .catch(err => { // Promise convention dicates you have a catch on every chain.
-        console.log(err);
+    // TODO poll initial state in case we're in the middle of a recording when the app is opened
+    .catch(err => { 
+        // Promise convention dicates you have a catch on every chain.
+        console.log(`Attempt to connect to obs ended with ${err.error} \nRetrying in ${this.obsSettings.reconnect.interval} milliseconds.`);
         this.obsInternal.isConnected = false;
     });
   }
@@ -72,10 +74,8 @@ export default class OBSDispatcher {
   }
 
   initialize() {
-    console.log('initialize()');
-    console.log(this.obsInternal);
     // TODO poll config
-    this.obsInternal.intervalId = setInterval(this.attemptConnection.bind(this), 1000);
+    this.obsInternal.intervalId = setInterval(this.attemptConnection.bind(this), this.obsSettings.reconnect.interval);
   }
 
   registerListener(listener) {

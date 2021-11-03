@@ -1,11 +1,10 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-import StatusDisplayer from './status/statusDisplayer';
-import TrayStatusDisplayer from './status/trayStatusDisplayer';
+
+const path = require('path');
 
 import OBSDispatcher from './obs/obsDispatcher';
 import MainOBSListener from './obs/mainObsListener';
 import RendererOBSListener from './obs/rendererObsListener';
-import { OBSEvents } from './obs/obsListener';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -16,7 +15,15 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 // TODO load settings
 const appSettings = {
   obs: {
-    port: "4444"
+    server: {
+      port: "4444"
+    },
+    reconnect: {
+      interval: 2000
+    },
+  },
+  overlay: {
+    mode: "logo"
   }
 }
 
@@ -28,6 +35,7 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    backgroundColor: "#1A2933",
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
@@ -49,6 +57,11 @@ const createWindow = () => {
   obsDispatcher.registerListener(mainListener);
   obsDispatcher.registerListener(renderListener);
   
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.webContents.send("App.Initialize", appSettings);
+    obsDispatcher.initialize();
+  });
+
   // play function atm
   // function dispatcher() {
   //   obsDispatcher.dispatch(OBSEvents.RecordingStarted);
@@ -57,7 +70,6 @@ const createWindow = () => {
   // setInterval(dispatcher, 2000);
 
   // TODO this needs to move to work pool on
-  // obsDispatcher.initialize();
 };
 
 // This method will be called when Electron has finished

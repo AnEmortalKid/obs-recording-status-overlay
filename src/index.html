@@ -10,14 +10,26 @@
     <h1>💖 Hello World!</h1>
     <p>Welcome to your Electron application.</p>
     <hr/>
-    <div class="container">
-      <div class="image">
-        <div id="circle"></div>
-      </div>
-      <div class="text">
-        <p id="statusText">00:00:00</p>
+
+    <!-- todo figure out layout-->
+    <div id="timer-overlay" hidden>
+      <div class="container">
+        <div class="image">
+          <img src="/images/red_circle_md.png"></img>
+        </div>
+        <div class="text">
+          <p id="timer-overlay-statusText">00:00:00</p>
+        </div>
       </div>
     </div>
-    <hr/>
+
+    <div id="logo-overlay" hidden>
+      <div class="container">
+        <div class="image">
+          <img id="logo-overlay-image" src="/images/raccoon_logo.jpeg"></div>
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>
