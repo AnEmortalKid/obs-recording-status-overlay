@@ -1,6 +1,3 @@
- - TODO set icon
-- win.setIcon('./raccon_record.jpeg')
-
 ## Settings
 
 * https://www.npmjs.com/package/electron-app-settings
@@ -9,10 +6,9 @@
 ## Improve App experience
 
 * Prettify UI
-* Add icon
+* Add icon -- need new PNG
 
-* Fix up Tray icon (red ball)
-* Figure out logo
+* Figure out logo -- need new PNG
 
-* Figure out settings
-* Figure out settings page...........
+* Figure out settings - need to save
+* Figure out settings page - create editor
