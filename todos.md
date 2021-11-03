@@ -1,10 +1,6 @@
  - TODO set icon
 - win.setIcon('./raccon_record.jpeg')
 
-- TODO appify
-- TODO browserify build shit
-
-
 ## Settings
 
 * https://www.npmjs.com/package/electron-app-settings
@@ -17,8 +13,6 @@
 
 * Fix up Tray icon (red ball)
 * Figure out logo
-* Figure out assets
 
 * Figure out settings
-* Figure out display mode
 * Figure out settings page...........

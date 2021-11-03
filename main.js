@@ -30,8 +30,6 @@ function createWindow () {
 
     win.setPosition(0,0);
 
-    // TODO set fullscreen on top of everything
-
     win.setAlwaysOnTop(true, "screen-saver");
     win.setFullScreenable(false);
     win.setVisibleOnAllWorkspaces(true);
@@ -44,10 +42,6 @@ function createWindow () {
     const iconImg = path.join(__dirname, 'images', 'raccoon_logo.jpeg')
     win.setIcon(iconImg);
 
-    // TODO display notifications settings
-    // todo notif based?
-
-    // TODO browserify build
 }
 
   let trayRecordStatus;

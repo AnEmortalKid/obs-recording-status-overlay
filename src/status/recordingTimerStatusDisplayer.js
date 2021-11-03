@@ -1,3 +1,5 @@
+import StatusDisplayer from "./statusDisplayer";
+
 const secondsInHour = 60 * 60;
 const secondsInMinute = 60;
 
@@ -27,9 +29,10 @@ const textId = "timer-overlay-statusText"
 /**
  * Displayer that tracks the time spent recording as well as an indication of that recording
  */
-export default class RecordingTimerStatusDisplayer {
+export default class RecordingTimerStatusDisplayer extends StatusDisplayer {
 
   constructor() {
+    super();
     this.timerSeconds = 0;
     this.timerIntervalId = null;
     

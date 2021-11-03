@@ -1,10 +1,12 @@
+import StatusDisplayer from "./statusDisplayer";
 
 const containerId = "logo-overlay"
 const imgId = "logo-overlay-image"
 
-export default class LogoStatusDisplayer {
+export default class LogoStatusDisplayer extends StatusDisplayer{
 
     constructor() {
+        super();
         // set to visible
         document.getElementById(containerId).hidden = false;
         
