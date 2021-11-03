@@ -3,6 +3,9 @@ import StatusDisplayer from "./statusDisplayer";
 const containerId = "logo-overlay"
 const imgId = "logo-overlay-image"
 
+/**
+ * A StatusDisplayer that Toggles the display of our Logo
+ */
 export default class LogoStatusDisplayer extends StatusDisplayer{
 
     constructor() {

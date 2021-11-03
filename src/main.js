@@ -1,6 +1,8 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, Tray, nativeTheme, Menu } = require('electron');
 
 const path = require('path');
+
+const debug = false;
 
 import OBSDispatcher from './obs/obsDispatcher';
 import MainOBSListener from './obs/mainObsListener';
@@ -11,6 +13,7 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit();
 }
 
+let tray;
 
 // TODO load settings
 const appSettings = {
@@ -27,15 +30,23 @@ const appSettings = {
   }
 }
 
+const getIcon = () => {
+  if (process.platform === 'win32') return 'icon-light@2x.ico';
+  if (nativeTheme.shouldUseDarkColors) return 'icon-light.png';
+  return 'icon-dark.png';
+};
+
 const obsDispatcher = new OBSDispatcher(appSettings);
 
 let mainWindow;
 const createWindow = () => {
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 200,
+    height: 200,
     backgroundColor: "#1A2933",
+    frame: false,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
@@ -43,13 +54,14 @@ const createWindow = () => {
     }
   });
 
+  // TODO lock modes
+  // mainWindow.setMenuBarVisibility(false);
+  // mainWindow.setFullScreenable(false);
+  // mainWindow.setResizable(false);
+  // mainWindow.setMovable(true);
+
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
-
-  //const trayStatus = new TrayStatusDisplayer(mainWindow);
 
   const mainListener = new MainOBSListener(mainWindow);
   const renderListener = new RendererOBSListener(mainWindow.webContents);
@@ -59,17 +71,30 @@ const createWindow = () => {
   
   mainWindow.on('ready-to-show', () => {
     mainWindow.webContents.send("App.Initialize", appSettings);
+    // TODO this needs to move to worker pool
     obsDispatcher.initialize();
   });
+  
+  // DEBUG mode
+  if(debug) {
+    // Open the DevTools.
+    mainWindow.setSize(400, 400);
+    mainWindow.webContents.openDevTools();
+  }
 
-  // play function atm
-  // function dispatcher() {
-  //   obsDispatcher.dispatch(OBSEvents.RecordingStarted);
-  // }
+  mainWindow.setIcon(path.resolve(__dirname, "images", "raccoon_logo.jpeg"));
 
-  // setInterval(dispatcher, 2000);
 
-  // TODO this needs to move to work pool on
+  tray = new Tray(path.join(__dirname, "images", getIcon()));
+  tray.setPressedImage(path.join(__dirname, "images", 'icon-light.png'));
+
+  if (process.platform === 'win32') {
+    tray.on('click', tray.popUpContextMenu);
+  }
+
+  updateMenu();
+
+  tray.setToolTip('OBS Status Recorder');
 };
 
 // This method will be called when Electron has finished
@@ -97,3 +122,19 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+const updateMenu = () => {
+  const menu = Menu.buildFromTemplate([
+    {
+      label: 'Create New Clipping',
+      click() { () => { console.log("New Clip Please") } }
+    },
+    { type: 'separator' },
+    { label: 'ClickMe', click() { console.log('Click')}},
+    {
+      label: 'Quit',
+      click() { app.quit(); }
+    }
+  ]);
+
+  tray.setContextMenu(menu);
+};

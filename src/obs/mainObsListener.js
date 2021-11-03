@@ -1,4 +1,4 @@
-import TrayStatusDisplayer from "../status/trayStatusDisplayer";
+import AppIconStatusDisplayer from "../status/trayStatusDisplayer";
 import { OBSEvents, OBSListener } from "./obsListener";
 
 /**
@@ -9,18 +9,17 @@ export default class MainOBSListener extends OBSListener {
    constructor(window) {
       super();
       this.window = window;
-      this.td = new TrayStatusDisplayer(window);
+      this.displayer = new AppIconStatusDisplayer(window);
    }
 
    notify(event)  {
       console.log('MainOBSListener: ' + event);
-      // TODO not sure if displayers are worth it now or not
       switch(event) {
          case OBSEvents.RecordingStarted:
-            this.td.onStart();
+            this.displayer.onStart();
             break;
          case OBSEvents.RecordingStopped:
-            this.td.onStop();
+            this.displayer.onStop();
             break;
       }
    }

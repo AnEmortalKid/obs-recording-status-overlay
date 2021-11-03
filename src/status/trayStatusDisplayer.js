@@ -2,7 +2,10 @@ import StatusDisplayer from "./statusDisplayer";
 
 const path = require("path");
 
-export default class TrayStatusDisplayer extends StatusDisplayer {
+/**
+ * A StatusDisplayer that uses the Application's Icon
+ */
+export default class AppIconStatusDisplayer extends StatusDisplayer {
 
   constructor(win) {
     super();

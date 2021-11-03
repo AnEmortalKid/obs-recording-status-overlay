@@ -27,7 +27,7 @@ const containerId = "timer-overlay"
 const textId = "timer-overlay-statusText"
 
 /**
- * Displayer that tracks the time spent recording as well as an indication of that recording
+ * Displayer that tracks the time spent recording as well as a status indication
  */
 export default class RecordingTimerStatusDisplayer extends StatusDisplayer {
 
