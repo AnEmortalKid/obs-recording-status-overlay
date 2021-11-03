@@ -2,7 +2,7 @@ const { app, BrowserWindow, Tray, nativeTheme, Menu } = require("electron");
 
 const path = require("path");
 
-const debug = false;
+const debug = true;
 
 import OBSDispatcher from "./obs/obsDispatcher";
 import MainOBSListener from "./obs/mainObsListener";
@@ -46,7 +46,7 @@ const createWindow = () => {
     width: 800,
     height: 600,
     backgroundColor: "#1A2933",
-    frame: false,
+    frame: debug,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
@@ -78,7 +78,7 @@ const createWindow = () => {
   // DEBUG mode
   if (debug) {
     // Open the DevTools.
-    mainWindow.setSize(400, 400);
+    mainWindow.setSize(600, 800);
     mainWindow.webContents.openDevTools();
   }
 
