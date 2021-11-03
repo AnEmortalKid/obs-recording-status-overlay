@@ -10,7 +10,9 @@
     "start": "electron-forge start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "prettier": "./node_modules/.bin/prettier --write .",
+    "prettier:check": "./node_modules/.bin/prettier --check ."
   },
   "author": "Jan",
   "license": "ISC",
@@ -26,6 +28,7 @@
     "css-loader": "^6.5.0",
     "electron": "15.3.0",
     "node-loader": "^2.0.0",
+    "prettier": "2.4.1",
     "style-loader": "^3.3.1"
   },
   "dependencies": {

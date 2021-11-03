@@ -1,0 +1,17 @@
+node_modules/
+dist/
+docs/
+coverage/
+.webpack/
+
+# ignore all html files
+*.html
+
+# no json
+*.json
+
+# no yaml
+*.yml
+
+# no md
+*.md

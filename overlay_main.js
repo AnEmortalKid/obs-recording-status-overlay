@@ -1,36 +1,38 @@
-const { app, BrowserWindow } = require('electron')
-const path = require('path')
+const { app, BrowserWindow } = require("electron");
+const path = require("path");
 
-function createWindow () {
+function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
+      preload: path.join(__dirname, "preload.js"),
+    },
+  });
 
-  win.loadFile('index.html')
+  win.loadFile("index.html");
 
-  win.setOverlayIcon('/Users/Jan/Downloads/pan_green_circle.png', 'Description for overlay')
-  win.flashFrame(true)
+  win.setOverlayIcon(
+    "/Users/Jan/Downloads/pan_green_circle.png",
+    "Description for overlay"
+  );
+  win.flashFrame(true);
 
-  console.log(window.obsstudio.pluginVersion)
+  console.log(window.obsstudio.pluginVersion);
 }
 
 app.whenReady().then(() => {
-  createWindow()
+  createWindow();
 
-  app.on('activate', () => {
+  app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
+      createWindow();
     }
-  })
-})
+  });
+});
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
   }
-})
-
+});

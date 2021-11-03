@@ -1,4 +1,4 @@
-console.log('load preload');
+console.log("load preload");
 
 // contextBridge.exposeInMainWorld(
 //   'obsDispatcher', {

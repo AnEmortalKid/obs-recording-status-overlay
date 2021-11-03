@@ -19,48 +19,48 @@ function toDurationString(seconds) {
   var hoursStr = String(hours).padStart(2, 0);
   var minStr = String(minutes).padStart(2, 0);
   var secStr = String(remaining).padStart(2, 0);
-  
+
   return hoursStr + ":" + minStr + ":" + secStr;
 }
 
-const containerId = "timer-overlay"
-const textId = "timer-overlay-statusText"
+const containerId = "timer-overlay";
+const textId = "timer-overlay-statusText";
 
 /**
  * Displayer that tracks the time spent recording as well as a status indication
  */
 export default class RecordingTimerStatusDisplayer extends StatusDisplayer {
-
   constructor() {
     super();
     this.timerSeconds = 0;
     this.timerIntervalId = null;
-    
+
     // set to visible
     document.getElementById(containerId).hidden = false;
   }
 
   timerTick() {
-    this.timerSeconds = this.timerSeconds +1;
+    this.timerSeconds = this.timerSeconds + 1;
     this.updateLabel();
   }
 
   updateLabel() {
-    document.getElementById(textId).textContent = toDurationString(this.timerSeconds);
+    document.getElementById(textId).textContent = toDurationString(
+      this.timerSeconds
+    );
   }
 
   onStart() {
-    console.log('OnStart');
+    console.log("OnStart");
     this.timerSeconds = 0;
 
     this.timerIntervalId = setInterval(this.timerTick.bind(this), 1000);
   }
 
   onStop() {
-    console.log('OnStop');
+    console.log("OnStop");
     clearInterval(this.timerIntervalId);
     this.timerSeconds = 0;
     this.updateLabel();
   }
-
 }

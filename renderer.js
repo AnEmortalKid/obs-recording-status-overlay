@@ -1,17 +1,16 @@
-
-console.log('Renderer loaded');
+console.log("Renderer loaded");
 
 function setListeners() {
-  window.obs.on('RecordingStarted', (data) => {
+  window.obs.on("RecordingStarted", (data) => {
     console.log(`Recording Start: ${data.recordingFilename}`);
-  
-    window.ipcRenderer.invoke('recordingStarted');
+
+    window.ipcRenderer.invoke("recordingStarted");
     document.getElementById("logo").classList.add("recording");
   });
-  
-  window.obs.on('RecordingStopped', (data) => {
+
+  window.obs.on("RecordingStopped", (data) => {
     console.log(`Recording Stop: ${data.recordingFilename}`);
-    window.ipcRenderer.invoke('recordingStopped');
+    window.ipcRenderer.invoke("recordingStopped");
     document.getElementById("logo").classList.remove("recording");
   });
 }
@@ -20,13 +19,12 @@ function setListeners() {
 let checkConnectionInterval;
 
 function establishConnection() {
-  console.log('establishConnection');
-  if(window.obs.isConnected()) {
+  console.log("establishConnection");
+  if (window.obs.isConnected()) {
     setListeners();
     clearInterval(checkConnectionInterval);
-  }
-  else {
-    console.log('Attempt connect');
+  } else {
+    console.log("Attempt connect");
     window.obs.connect();
   }
 }
