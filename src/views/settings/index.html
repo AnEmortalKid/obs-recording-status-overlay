@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Settings</title>
+    <!-- <link rel="stylesheet" href="../css/renderer.css" /> -->
+  </head>
+  <body>
+      <header>
+        <div>
+          <h2>Settings</h2>
+        </div>
+      </header>
+
+      <!-- const appSettings = {
+        obs: {
+          server: {
+            port: "4444",
+          },
+          reconnect: {
+            interval: 2000,
+          },
+        },
+        overlay: {
+          mode: "logo",
+        },
+      }; -->
+
+      <script src="./settingsEditor.js"></script>
+
+      <div id="form-container">
+        <form id="settings-form">
+
+          <div id="obs-settings">
+            <div id="obs-settings-server">
+              <div id="obs-settings-port">
+                <label>Port</label>
+                <input type="text" id="input-obs.server.port" name="obs.server.port">
+              </div>
+              <div id="obs-settings-password">
+                <label>Password</label>
+                <input type="text" id="input-obs.server.password" name="obs.server.password">
+              </div>
+            </div>
+            <div id="obs-settings-reconnect">
+              <label>Interval Seconds</label>
+              <input type="number" min="1" step="1" id="input-obs.reconnect.interval" name="obs.reconnect.interval">
+            </div>
+          </div>
+
+          <div id="overlay-settings">
+            <div id="overlay-settings-mode">
+              <label>Mode</label>
+              <select name="obs.overlay.mode" id="select-obs.overlay.mode">
+                <option value="timer">Timer</option>
+                <option value="logo">Logo</option>
+              </select>
+            </div>
+          </div>
+
+          <input type="submit" hidden>
+        </form>
+      </div>
+
+      <footer>
+        <div>
+          <button id="settings-apply-btn" >Apply</button>
+          <button  id="settings-cancel-btn">Close</button>
+        </div>
+      </footer>
+  </body>
+</html>

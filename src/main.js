@@ -1,8 +1,18 @@
-const { app, BrowserWindow, Tray, nativeTheme, Menu } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  Tray,
+  nativeTheme,
+  Menu,
+  ipcMain,
+  MenuItem,
+} = require("electron");
+
+import { createSettingsWindow } from "./settings/settingsWindow";
 
 const path = require("path");
 
-const debug = true;
+const debug = false;
 
 import OBSDispatcher from "./obs/obsDispatcher";
 import MainOBSListener from "./obs/mainObsListener";
@@ -23,30 +33,44 @@ const appSettings = {
       port: "4444",
     },
     reconnect: {
-      interval: 2000,
+      intervalMS: 2000,
     },
   },
   overlay: {
-    mode: "logo",
+    mode: "timer",
   },
 };
 
 const getIcon = () => {
-  if (process.platform === "win32") return "icon-light@2x.ico";
-  if (nativeTheme.shouldUseDarkColors) return "icon-light.png";
-  return "icon-dark.png";
+  // if (process.platform === "win32") return "icon-light@2x.ico";
+  // if (nativeTheme.shouldUseDarkColors) return "icon-light.png";
+  return "tray_icon.png";
 };
 
 const obsDispatcher = new OBSDispatcher(appSettings);
 
 let mainWindow;
+let settingsWindow;
+
+function createSettings() {
+  if (settingsWindow != null) {
+    return;
+  }
+
+  settingsWindow = createSettingsWindow(mainWindow, appSettings);
+  settingsWindow.on("close", () => {
+    // dispose of ref
+    // I bet we can just do a close/hide and re-init instead
+    settingsWindow = null;
+  });
+}
+
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 200,
+    height: 200,
     backgroundColor: "#1A2933",
-    frame: debug,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
@@ -54,11 +78,16 @@ const createWindow = () => {
     },
   });
 
+  // TODO figure out how to make movable without title bar
+  // TODO fiugre out how to hide the frame
+
   // TODO lock modes
-  // mainWindow.setMenuBarVisibility(false);
+  // mainWindow.setPosition(0,0);
+  // mainWindow.setMenuBarVisibility(true);
   // mainWindow.setFullScreenable(false);
   // mainWindow.setResizable(false);
   // mainWindow.setMovable(true);
+  // unlockApp();
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
@@ -82,37 +111,20 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools();
   }
 
-  mainWindow.setIcon(path.resolve(__dirname, "images", "raccoon_logo.jpeg"));
+  mainWindow.setIcon(
+    path.resolve(__dirname, "images", "obs_status_overlay_logo.png")
+  );
+  // TODO bind to tray button
+  // createSettings();
 
-  // Example show settings
-  // const child = new BrowserWindow({
-  //   parent: mainWindow, modal: true,
-  //   show: false,
-  //   width: 200,
-  //   height: 200
-  // })
-  // child.loadURL(path.resolve(__dirname, "views", "settings.html"))
-  // child.once('ready-to-show', () => {
-  //   child.show()
-  // })
+  tray = new Tray(path.join(__dirname, "images", getIcon()));
+  if (process.platform === "win32") {
+    tray.on("click", tray.popUpContextMenu);
+  }
 
-  //   const view = new BrowserView()
-  //   mainWindow.setBrowserView(view)
-  //   view.setBounds({ x: 0, y: 0, width: 300, height: 300 })
-  // view.webContents.loadURL('https://electronjs.org')
+  updateMenu();
 
-  // TODO tray fix / setup menu in tray
-
-  // tray = new Tray(path.join(__dirname, "images", getIcon()));
-  // tray.setPressedImage(path.join(__dirname, "images", 'icon-light.png'));
-
-  // if (process.platform === 'win32') {
-  //   tray.on('click', tray.popUpContextMenu);
-  // }
-
-  // updateMenu();
-
-  // tray.setToolTip('OBS Status Recorder');
+  tray.setToolTip("OBS Status Overlay");
 };
 
 // This method will be called when Electron has finished
@@ -125,6 +137,7 @@ app.on("ready", createWindow);
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
+    tray.destroy();
     app.quit();
   }
 });
@@ -137,32 +150,87 @@ app.on("activate", () => {
   }
 });
 
+ipcMain.on("settings-dialog-close", () => {
+  if (settingsWindow) {
+    console.log("Close");
+    settingsWindow.close();
+  }
+});
+
+ipcMain.on("settings-dialog-apply", (event, settings) => {
+  if (settingsWindow) {
+    console.log("Apply");
+    console.log(JSON.stringify(settings));
+    settingsWindow.close();
+  }
+});
+
+function lockApp() {
+  mainWindow.setFullScreenable(false);
+  mainWindow.setResizable(false);
+  mainWindow.setMovable(false);
+}
+
+function unlockApp() {
+  mainWindow.setFullScreenable(true);
+  mainWindow.setResizable(true);
+  mainWindow.setMovable(true);
+}
+
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 const updateMenu = () => {
-  const menu = Menu.buildFromTemplate([
-    {
-      label: "Create New Clipping",
-      click() {
-        () => {
-          console.log("New Clip Please");
-        };
-      },
+  const menu = new Menu();
+
+  const settingsItem = new MenuItem({
+    label: "Settings",
+    click() {
+      createSettings();
     },
-    { type: "separator" },
-    {
-      label: "ClickMe",
-      click() {
-        console.log("Click");
-      },
+  });
+
+  // TODO set initial state.
+  const lockItem = new MenuItem({
+    label: "Locked",
+    type: "checkbox",
+    click(menuItem) {
+      if (menuItem.checked) {
+        lockApp();
+      } else {
+        unlockApp();
+      }
     },
-    {
-      label: "Quit",
-      click() {
-        app.quit();
-      },
+  });
+
+  const quitItem = new MenuItem({
+    label: "Quit",
+    click() {
+      app.quit();
     },
-  ]);
+  });
+
+  menu.append(settingsItem);
+  menu.append(new MenuItem({ type: "separator" }));
+  menu.append(lockItem);
+  menu.append(new MenuItem({ type: "separator" }));
+  menu.append(quitItem);
+
+  // const menu = Menu.buildFromTemplate([
+  //   {
+  //     label: "Settings",
+  //     click() {
+
+  //     },
+  //   },
+  //  ,
+  //   {
+
+  //     click(menuItem) {
+  //       console.log(menuItem.checked);
+  //     },
+  //   },
+
+  // ]);
 
   tray.setContextMenu(menu);
 };

@@ -6,9 +6,14 @@
 ## Improve App experience
 
 * Prettify UI
-* Add icon -- need new PNG
-
-* Figure out logo -- need new PNG
-
 * Figure out settings - need to save
-* Figure out settings page - create editor
+
+
+## Things to do
+
+* Overlay -> Use Red alert and not red ball
+
+## Suggestions
+
+* Make it transparent on LOCK 
+* Make it not transparent on not lock

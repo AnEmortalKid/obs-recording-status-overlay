@@ -37,6 +37,7 @@ export default class OBSDispatcher {
         obsSocket.on(OBSEvents.RecordingStopped, (data) => {
           this.dispatch(OBSEvents.RecordingStopped);
         });
+
         // TODO make this pretty
         obsSocket.on("Exiting", (data) => {
           console.log("OBS Said Bye");
@@ -55,7 +56,7 @@ export default class OBSDispatcher {
       .catch((err) => {
         // Promise convention dicates you have a catch on every chain.
         console.log(
-          `Attempt to connect to obs ended with ${err.error} \nRetrying in ${this.obsSettings.reconnect.interval} milliseconds.`
+          `Attempt to connect to obs ended with ${err.error} \nRetrying in ${this.obsSettings.reconnect.intervalMS} milliseconds.`
         );
         this.obsInternal.isConnected = false;
       });
@@ -78,7 +79,7 @@ export default class OBSDispatcher {
     // TODO poll config
     this.obsInternal.intervalId = setInterval(
       this.attemptConnection.bind(this),
-      this.obsSettings.reconnect.interval
+      this.obsSettings.reconnect.intervalMS
     );
   }
 
