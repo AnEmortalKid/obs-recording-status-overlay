@@ -11,7 +11,11 @@ const {
 } = require("electron");
 
 import { createSettingsWindow } from "./settings/settingsWindow";
-import { schemaDefinition, SettingsEvents } from "./settings/schema";
+import {
+  schemaDefaults,
+  schemaDefinition,
+  SettingsEvents,
+} from "./settings/schema";
 
 const path = require("path");
 
@@ -31,7 +35,7 @@ let tray;
 
 const Store = require("electron-store");
 
-const store = new Store(schemaDefinition);
+const store = new Store({ schema: schemaDefinition, defaults: schemaDefaults });
 
 // store.set(appSettings);
 console.log(`Settings: ${JSON.stringify(store.store)}`);
@@ -75,6 +79,8 @@ const createWindow = () => {
     width: 200,
     height: 200,
     backgroundColor: "#1A2933",
+    // frame: debug ? debug : true,
+    frame: false,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
@@ -82,7 +88,8 @@ const createWindow = () => {
     },
   });
 
-  // TODO hide frame but make draggable
+  mainWindow.setFullScreenable(false);
+  mainWindow.setAlwaysOnTop(true);
 
   const appPrefs = store.get("application");
 
@@ -166,7 +173,17 @@ ipcMain.on(SettingsEvents.DIALOG.CANCEL, () => {
 
 ipcMain.on(SettingsEvents.DIALOG.APPLY, (event, settings) => {
   if (settingsWindow) {
-    store.set("obs", settings.obs);
+    // set each part to ensure they're the right type after serializing
+    const fixedObs = {
+      server: {
+        port: parseInt(settings.obs.server.port),
+        password: settings.obs.server.password,
+      },
+      reconnect: {
+        intervalMS: parseInt(settings.obs.reconnect.intervalMS),
+      },
+    };
+    store.set("obs", fixedObs);
 
     const oldOverlay = store.get("overlay");
     if (oldOverlay.mode != settings.overlay.mode) {
@@ -179,9 +196,9 @@ ipcMain.on(SettingsEvents.DIALOG.APPLY, (event, settings) => {
 });
 
 function lockApp() {
-  mainWindow.setFullScreenable(false);
   mainWindow.setResizable(false);
   mainWindow.setMovable(false);
+  mainWindow.setIgnoreMouseEvents(true);
 
   const bounds = mainWindow.getBounds();
   store.set("application.bounds", bounds);
@@ -189,9 +206,9 @@ function lockApp() {
 }
 
 function unlockApp() {
-  mainWindow.setFullScreenable(true);
   mainWindow.setResizable(true);
   mainWindow.setMovable(true);
+  mainWindow.setIgnoreMouseEvents(false);
 
   store.set("application.locked", false);
 }

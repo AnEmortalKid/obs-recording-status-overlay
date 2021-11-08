@@ -2,27 +2,26 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <link rel="stylesheet" href="/css/w3.css" />
     <link rel="stylesheet" href="/css/renderer.css" />
-
   </head>
-  <body>
+  <body style="-webkit-app-region: drag">
      <!-- todo figure out layout-->
     <div id="timer-overlay" hidden>
-      <div class="container">
-        <div class="image">
-          <img src="/images/alert-red.png"></img>
+      <div class="w3-cell-row w3-container">
+        <div class="w3-cell w3-cell-middle" style="width:35%">
+          <img class="w3-image" src="/images/alert-red.png"></img>
         </div>
-        <div class="text">
-          <p id="timer-overlay-statusText">00:00:00</p>
+        <div class="w3-cell w3-cell-middle">
+          <p class="w3-margin-left" id="timer-overlay-statusText">00:00:00</p>
         </div>
       </div>
     </div>
 
     <div id="logo-overlay" hidden>
-      <div class="container">
-        <div class="image">
-          <img id="logo-overlay-image" src="/images/obs_status_overlay_logo_red.png"></div>
+      <div class="w3-container w3-padding">
+        <div style="object-fit: contain;">
+          <img class="w3-image" id="logo-overlay-image" src="/images/obs_status_overlay_logo_red.png"></div>
         </div>
       </div>
     </div>

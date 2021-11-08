@@ -1,38 +1,5 @@
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
-  margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
-}
-
-/* todo fix lefty left instead of center */
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-img {
-  max-width: 100%;
-}
-
-.image {
-  flex-basis: 40%;
-}
-
-.text {
-  font-size: 20px;
-  padding-left: 20px;
-}
-
-#circle {
-  width: 50px;
-  height: 50px;
-  -webkit-border-radius: 25px;
-  -moz-border-radius: 25px;
-  border-radius: 25px;
-  background: red;
+::-webkit-scrollbar {
+  display: none;
 }
 
 #logo-overlay-image {

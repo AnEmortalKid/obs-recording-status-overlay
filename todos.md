@@ -1,12 +1,12 @@
 ## Settings
 
-* https://www.npmjs.com/package/electron-app-settings
-  * Support for server/pass info
+
+* Support for server/pass info to obs
 
 ## Improve App experience
 
 * Prettify UI
-* Figure out settings - need to save
+  * Settings Dialog needs doing
 
 
 ## Things to do
@@ -14,6 +14,8 @@
 * Overlay -> Use Red alert and not red ball
 
 ## Suggestions
+
+TODO:
 
 * Make it transparent on LOCK 
 * Make it not transparent on not lock

@@ -23,8 +23,6 @@ export function createSettingsWindow(mainWindow, appSettings) {
 
   settingsWindow.once("ready-to-show", () => {
     settingsWindow.show();
-    console.log("Firing Settings.Initialize");
-    console.log(JSON.stringify(appSettings));
     settingsWindow.webContents.send("Settings.Initialize", appSettings);
   });
 

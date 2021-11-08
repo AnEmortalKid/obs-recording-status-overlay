@@ -15,7 +15,7 @@ export default class AppIconStatusDisplayer extends StatusDisplayer {
 
   statusRecording() {
     this.win.setOverlayIcon(
-      path.resolve(__dirname, "images", "red_circle_md.png"),
+      path.resolve(__dirname, "images", "alert-red.png"),
       "A recording has begun."
     );
   }

@@ -21,6 +21,29 @@
 //     "street_type": { "enum": ["Street", "Avenue", "Boulevard"] }
 //   }
 
+export const schemaDefaults = {
+  obs: {
+    server: {
+      port: 4444,
+    },
+    reconnect: {
+      intervalMS: 1000,
+    },
+  },
+  overlay: {
+    mode: "timer",
+  },
+  application: {
+    locked: false,
+    bounds: {
+      x: 100,
+      y: 100,
+      width: 400,
+      height: 400,
+    },
+  },
+};
+
 export const schemaDefinition = {
   obs: {
     type: "object",
@@ -30,6 +53,7 @@ export const schemaDefinition = {
         properties: {
           port: {
             type: "number",
+            default: 4444,
           },
           password: {
             type: "string",

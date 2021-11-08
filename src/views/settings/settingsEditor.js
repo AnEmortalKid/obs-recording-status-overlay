@@ -30,23 +30,25 @@ function bindToForm(appSettings) {
 }
 
 function bindFromForm() {
-  const obsServerPortInput = document.getElementById(obsServerPort);
-  const obsServerPassInput = document.getElementById(obsServerPass);
-  const obsReconnectIntevalInput = document.getElementById(obsReconnectInteval);
-  const overlayModeSelect = document.getElementById(overlayMode);
+  const obsServerPortInput = document.getElementById(obsServerPort).value;
+  const obsServerPassInput = document.getElementById(obsServerPass).value;
+  const obsReconnectIntevalInput =
+    document.getElementById(obsReconnectInteval).value;
+  const overlayModeSelect = document.getElementById(overlayMode).value;
 
+  console.log("Binding " + obsServerPortInput);
   return {
     obs: {
       server: {
-        port: obsServerPortInput.value,
-        password: obsServerPassInput.value,
+        port: obsServerPortInput,
+        password: obsServerPassInput,
       },
       reconnect: {
-        intervalMS: obsReconnectIntevalInput.value * 1000,
+        intervalMS: obsReconnectIntevalInput * 1000,
       },
     },
     overlay: {
-      mode: overlayModeSelect.value.toLowerCase(),
+      mode: overlayModeSelect.toLowerCase(),
     },
   };
 }

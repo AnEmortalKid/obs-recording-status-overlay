@@ -8,6 +8,9 @@ const OBSWebSocket = require("obs-websocket-js");
 export default class OBSDispatcher {
   // TODO turn into private stuff
 
+  // TODO figure out why it reconnects multiple times
+  // TODO see if we can figure out a connection id or something to avoid reconnect
+
   /**
    *
    * @returns function that keeps looping
