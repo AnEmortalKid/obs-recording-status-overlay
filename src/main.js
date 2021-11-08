@@ -223,7 +223,6 @@ const updateMenu = () => {
     },
   });
 
-  // TODO set initial state.
   const lockItem = new MenuItem({
     label: "Locked",
     type: "checkbox",
@@ -236,7 +235,9 @@ const updateMenu = () => {
     },
   });
 
-  lockItem.checked = store.get("application.locked");
+  if (store.has("application.locked")) {
+    lockItem.checked = store.get("application.locked");
+  }
 
   const quitItem = new MenuItem({
     label: "Quit",

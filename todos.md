@@ -1,21 +1,26 @@
 ## Settings
 
-
 * Support for server/pass info to obs
+  * Test PASS support
 
 ## Improve App experience
 
 * Prettify UI
-  * Settings Dialog needs doing
-
-
-## Things to do
-
-* Overlay -> Use Red alert and not red ball
+  * Settings Dialog needs completing
 
 ## Suggestions
 
 TODO:
+  * Make it transparent on LOCK 
+  * Make it not transparent on not lock
 
-* Make it transparent on LOCK 
-* Make it not transparent on not lock
+- Make invisible background a setting option (might make it hard to drag
+  when not unlocked so just make it a toggle/setting)
+
+## Documentation
+
+Screenshots / docs
+
+## Publishing
+
+- Figure out build, upload, tagging, etc.
