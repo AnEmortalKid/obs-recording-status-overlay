@@ -1,9 +1,3 @@
-//  this.form.addEventListener("submit", submissionAction);
-
-// TODO make class?
-
-//  this.form = document.getElementById("settings-form");
-
 const { ipcRenderer } = require("electron");
 
 const obsServerPort = "input-obs.server.port";
