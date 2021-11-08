@@ -9,8 +9,7 @@ const {
 } = require("electron");
 
 import { createSettingsWindow } from "./settings/settingsWindow";
-
-import { schemaDefinition } from "./settings/schema";
+import { schemaDefinition, SettingsEvents } from "./settings/schema";
 
 const path = require("path");
 
@@ -32,21 +31,6 @@ const Store = require("electron-store");
 
 const store = new Store(schemaDefinition);
 
-// TODO load settings
-const appSettings = {
-  obs: {
-    server: {
-      port: "4444",
-    },
-    reconnect: {
-      intervalMS: 2000,
-    },
-  },
-  overlay: {
-    mode: "timer",
-  },
-};
-
 // store.set(appSettings);
 console.log(`Settings: ${JSON.stringify(store.store)}`);
 
@@ -56,7 +40,7 @@ const getIcon = () => {
   return "tray_icon.png";
 };
 
-const obsDispatcher = new OBSDispatcher(appSettings);
+const obsDispatcher = new OBSDispatcher(store.get("obs"));
 
 let mainWindow;
 let settingsWindow;
@@ -66,7 +50,12 @@ function createSettings() {
     return;
   }
 
-  settingsWindow = createSettingsWindow(mainWindow, appSettings);
+  const editables = {
+    obs: store.get("obs"),
+    overlay: store.get("overlay"),
+  };
+
+  settingsWindow = createSettingsWindow(mainWindow, editables);
   settingsWindow.on("close", () => {
     // dispose of ref
     // I bet we can just do a close/hide and re-init instead
@@ -108,7 +97,7 @@ const createWindow = () => {
   obsDispatcher.registerListener(renderListener);
 
   mainWindow.on("ready-to-show", () => {
-    mainWindow.webContents.send("App.Initialize", appSettings);
+    mainWindow.webContents.send("App.Initialize", store.get("overlay"));
     // TODO this needs to move to worker pool
     obsDispatcher.initialize();
   });
@@ -123,8 +112,6 @@ const createWindow = () => {
   mainWindow.setIcon(
     path.resolve(__dirname, "images", "obs_status_overlay_logo.png")
   );
-  // TODO bind to tray button
-  // createSettings();
 
   tray = new Tray(path.join(__dirname, "images", getIcon()));
   if (process.platform === "win32") {
@@ -159,17 +146,17 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.on("settings-dialog-close", () => {
+ipcMain.on(SettingsEvents.DIALOG.CANCEL, () => {
   if (settingsWindow) {
     console.log("Close");
     settingsWindow.close();
   }
 });
 
-ipcMain.on("settings-dialog-apply", (event, settings) => {
+ipcMain.on(SettingsEvents.DIALOG.APPLY, (event, settings) => {
   if (settingsWindow) {
-    console.log("Apply");
-    console.log(JSON.stringify(settings));
+    store.set("obs", settings.obs);
+    store.set("overlay", settings.overlay);
     settingsWindow.close();
   }
 });
@@ -223,23 +210,6 @@ const updateMenu = () => {
   menu.append(lockItem);
   menu.append(new MenuItem({ type: "separator" }));
   menu.append(quitItem);
-
-  // const menu = Menu.buildFromTemplate([
-  //   {
-  //     label: "Settings",
-  //     click() {
-
-  //     },
-  //   },
-  //  ,
-  //   {
-
-  //     click(menuItem) {
-  //       console.log(menuItem.checked);
-  //     },
-  //   },
-
-  // ]);
 
   tray.setContextMenu(menu);
 };

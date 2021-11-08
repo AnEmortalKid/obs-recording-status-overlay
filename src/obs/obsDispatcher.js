@@ -64,8 +64,8 @@ export default class OBSDispatcher {
 
   // TODO connect/disconnect functions
 
-  constructor(appSettings) {
-    this.obsSettings = appSettings.obs;
+  constructor(obsSettings) {
+    this.obsSettings = obsSettings;
     this.obsInternal = {
       isConnected: false,
       obsSocket: null,

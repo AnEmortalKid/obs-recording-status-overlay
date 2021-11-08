@@ -57,3 +57,11 @@ export const schemaDefinition = {
     },
   },
 };
+
+export const SettingsEvents = {
+  DIALOG: {
+    APPLY: "Settings.Dialog.Apply",
+    CANCEL: "Settings.Dialog.Cancel",
+    INITIALIZE: "Settings.Dialog.Initialize",
+  },
+};

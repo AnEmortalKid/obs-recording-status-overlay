@@ -55,17 +55,19 @@ function bindButtons() {
   var applyBtn = document.getElementById("settings-apply-btn");
   applyBtn.addEventListener("click", (event) => {
     console.log("Saving");
-    ipcRenderer.send("settings-dialog-apply", bindFromForm());
+    ipcRenderer.send("Settings.Dialog.Apply", bindFromForm());
   });
 
   var cancelBtn = document.getElementById("settings-cancel-btn");
   cancelBtn.addEventListener("click", (event) => {
     console.log("Cancel");
-    ipcRenderer.send("settings-dialog-close");
+    ipcRenderer.send("Settings.Dialog.Cancel");
   });
 }
 
 ipcRenderer.on("Settings.Initialize", (event, appSettings) => {
+  console.log("Received Settings.Initialize");
+  console.log(JSON.stringify(appSettings));
   bindToForm(appSettings);
   bindButtons();
 });
