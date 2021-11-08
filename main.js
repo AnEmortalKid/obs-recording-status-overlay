@@ -8,6 +8,9 @@ const {
 const path = require("path");
 const { clearInterval } = require("timers");
 
+const Store = require("electron-store");
+const store = new Store();
+
 let win;
 
 // TODO Tray

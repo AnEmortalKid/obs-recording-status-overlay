@@ -10,6 +10,8 @@ const {
 
 import { createSettingsWindow } from "./settings/settingsWindow";
 
+import { schemaDefinition } from "./settings/schema";
+
 const path = require("path");
 
 const debug = false;
@@ -26,6 +28,10 @@ if (require("electron-squirrel-startup")) {
 
 let tray;
 
+const Store = require("electron-store");
+
+const store = new Store(schemaDefinition);
+
 // TODO load settings
 const appSettings = {
   obs: {
@@ -40,6 +46,9 @@ const appSettings = {
     mode: "timer",
   },
 };
+
+// store.set(appSettings);
+console.log(`Settings: ${JSON.stringify(store.store)}`);
 
 const getIcon = () => {
   // if (process.platform === "win32") return "icon-light@2x.ico";
