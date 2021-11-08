@@ -24,6 +24,11 @@ ipcRenderer.on(OBSEvents.RecordingStopped, () => {
 ipcRenderer.on("App.Initialize", (event, overlay) => {
   // TODO pass mode specific config
   const mode = overlay.mode;
+
+  // hide all displayers
+  document.getElementById("timer-overlay").hidden = true;
+  document.getElementById("logo-overlay").hidden = true;
+
   switch (mode) {
     case "timer":
       displayer = new RecordingTimerStatusDisplayer();

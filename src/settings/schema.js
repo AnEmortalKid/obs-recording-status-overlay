@@ -56,6 +56,32 @@ export const schemaDefinition = {
       },
     },
   },
+  application: {
+    type: "object",
+    properties: {
+      locked: {
+        type: "boolean",
+        default: "false",
+      },
+      bounds: {
+        type: "object",
+        properties: {
+          x: {
+            type: "number",
+          },
+          y: {
+            type: "number",
+          },
+          width: {
+            type: "number",
+          },
+          height: {
+            type: "number",
+          },
+        },
+      },
+    },
+  },
 };
 
 export const SettingsEvents = {

@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const {
   app,
   BrowserWindow,
@@ -13,7 +15,7 @@ import { schemaDefinition, SettingsEvents } from "./settings/schema";
 
 const path = require("path");
 
-const debug = false;
+const debug = process.env.DEBUG;
 
 import OBSDispatcher from "./obs/obsDispatcher";
 import MainOBSListener from "./obs/mainObsListener";
@@ -63,6 +65,10 @@ function createSettings() {
   });
 }
 
+function initRenderer() {
+  mainWindow.webContents.send("App.Initialize", store.get("overlay"));
+}
+
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -76,16 +82,21 @@ const createWindow = () => {
     },
   });
 
-  // TODO figure out how to make movable without title bar
-  // TODO fiugre out how to hide the frame
+  // TODO hide frame but make draggable
 
-  // TODO lock modes
-  // mainWindow.setPosition(0,0);
-  // mainWindow.setMenuBarVisibility(true);
-  // mainWindow.setFullScreenable(false);
-  // mainWindow.setResizable(false);
-  // mainWindow.setMovable(true);
-  // unlockApp();
+  const appPrefs = store.get("application");
+
+  if (appPrefs) {
+    if (appPrefs.locked) {
+      lockApp();
+    } else {
+      unlockApp();
+    }
+
+    if (appPrefs.bounds) {
+      mainWindow.setBounds(appPrefs.bounds);
+    }
+  }
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
@@ -97,7 +108,7 @@ const createWindow = () => {
   obsDispatcher.registerListener(renderListener);
 
   mainWindow.on("ready-to-show", () => {
-    mainWindow.webContents.send("App.Initialize", store.get("overlay"));
+    initRenderer();
     // TODO this needs to move to worker pool
     obsDispatcher.initialize();
   });
@@ -156,7 +167,13 @@ ipcMain.on(SettingsEvents.DIALOG.CANCEL, () => {
 ipcMain.on(SettingsEvents.DIALOG.APPLY, (event, settings) => {
   if (settingsWindow) {
     store.set("obs", settings.obs);
-    store.set("overlay", settings.overlay);
+
+    const oldOverlay = store.get("overlay");
+    if (oldOverlay.mode != settings.overlay.mode) {
+      store.set("overlay", settings.overlay);
+      initRenderer();
+    }
+
     settingsWindow.close();
   }
 });
@@ -165,16 +182,20 @@ function lockApp() {
   mainWindow.setFullScreenable(false);
   mainWindow.setResizable(false);
   mainWindow.setMovable(false);
+
+  const bounds = mainWindow.getBounds();
+  store.set("application.bounds", bounds);
+  store.set("application.locked", true);
 }
 
 function unlockApp() {
   mainWindow.setFullScreenable(true);
   mainWindow.setResizable(true);
   mainWindow.setMovable(true);
+
+  store.set("application.locked", false);
 }
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
 const updateMenu = () => {
   const menu = new Menu();
 
@@ -198,9 +219,12 @@ const updateMenu = () => {
     },
   });
 
+  lockItem.checked = store.get("application.locked");
+
   const quitItem = new MenuItem({
     label: "Quit",
     click() {
+      // TODO store bounds as well?
       app.quit();
     },
   });
