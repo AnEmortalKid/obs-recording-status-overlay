@@ -3,11 +3,6 @@
 * Support for server/pass info to obs
   * Test PASS support
 
-## Improve App experience
-
-* Prettify UI
-  * Settings Dialog needs completing
-
 ## Suggestions
 
 TODO:

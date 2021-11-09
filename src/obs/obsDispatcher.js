@@ -87,8 +87,6 @@ export default class OBSDispatcher {
   }
 
   registerListener(listener) {
-    console.log("Registering: " + listener);
-
     this.listeners.push(listener);
   }
 
@@ -97,9 +95,7 @@ export default class OBSDispatcher {
   }
 
   dispatch(event) {
-    console.log("Dispatching @" + new Date());
     for (const listener of this.listeners) {
-      // TODO event
       listener.notify(event);
     }
   }

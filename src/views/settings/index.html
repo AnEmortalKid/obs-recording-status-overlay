@@ -3,58 +3,51 @@
   <head>
     <meta charset="UTF-8">
     <title>Settings</title>
-    <!-- <link rel="stylesheet" href="../css/renderer.css" /> -->
+    <link rel="stylesheet" href="../../css/w3.css" />
   </head>
-  <body>
-      <header>
-        <div>
-          <h2>Settings</h2>
+  <body class="w3-text-white">
+      <header class="w3-container" >
+        <div class="w3-center">
+          <h3>Settings</h3>
         </div>
       </header>
-
-      <!-- const appSettings = {
-        obs: {
-          server: {
-            port: "4444",
-          },
-          reconnect: {
-            interval: 2000,
-          },
-        },
-        overlay: {
-          mode: "logo",
-        },
-      }; -->
-
-      <script src="./settingsEditor.js"></script>
-
       <div id="form-container">
-        <form id="settings-form">
+        <form id="settings-form" class="w3-container">
 
-          <div id="obs-settings">
-            <div id="obs-settings-server">
-              <div id="obs-settings-port">
-                <label>Port</label>
-                <input type="number" min="1" step="1" id="input-obs.server.port" name="obs.server.port">
+          <div id="obs-settings" class="w3-section">
+            <h4 class="w3-left"><u>OBS</u></h4>
+            <div class="w3-padding-16">
+            <div id="obs-settings-server" class="w3-container">
+              <div id="obs-settings-port" class="w3-row">
+                <label class="w3-text">Port: </label>
+                <input class="w3-input" type="number" min="1" step="1" id="input-obs.server.port" name="obs.server.port">
               </div>
-              <div id="obs-settings-password">
-                <label>Password</label>
-                <input type="text" id="input-obs.server.password" name="obs.server.password">
+              <div id="obs-settings-password" class="w3-row ">
+                <label class="w3-text">Password:</label>
+                <input class="w3-input" type="text" id="input-obs.server.password" name="obs.server.password">
               </div>
             </div>
-            <div id="obs-settings-reconnect">
-              <label>Interval Seconds</label>
-              <input type="number" min="1" step="1" id="input-obs.reconnect.interval" name="obs.reconnect.interval">
+            <div id="obs-settings-reconnect" class="w3-container">
+              <div class="w3-row">
+                <label class="w3-text">Interval Seconds:</label>
+                <input class="w3-input" type="number" min="1" step="1" id="input-obs.reconnect.interval" name="obs.reconnect.interval">
+              </div>
+            </div>
             </div>
           </div>
 
-          <div id="overlay-settings">
-            <div id="overlay-settings-mode">
-              <label>Mode</label>
-              <select name="obs.overlay.mode" id="select-obs.overlay.mode">
-                <option value="timer">Timer</option>
-                <option value="logo">Logo</option>
-              </select>
+          <div id="overlay-settings" class="w3-section">
+            <h4 class="w3-left"><u>Overlay</u></h4>
+            <div class="w3-container">
+              <div class="w3-padding-16">
+              <div id="overlay-settings-mode" class="w3-row">
+                <label class="w3-text">Mode:</label>
+                <select class="w3-select" name="obs.overlay.mode" id="select-obs.overlay.mode">
+                  <option value="timer">Timer</option>
+                  <option value="logo">Logo</option>
+                </select>
+              </div>
+              </div>
             </div>
           </div>
 
@@ -62,11 +55,13 @@
         </form>
       </div>
 
-      <footer>
-        <div>
-          <button id="settings-apply-btn" >Apply</button>
-          <button  id="settings-cancel-btn">Close</button>
+      <footer class="w3-container w3-padding">
+        <div class="w3-bar w3-center">
+          <button class="w3-button w3-round w3-blue-gray" id="settings-apply-btn" >Apply</button>
+          <button  class="w3-button w3-round w3-blue-gray" id="settings-cancel-btn">Close</button>
         </div>
       </footer>
+
+      <script src="./settingsEditor.js"></script>
   </body>
 </html>

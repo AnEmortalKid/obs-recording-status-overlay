@@ -9,8 +9,9 @@ export function createSettingsWindow(mainWindow, appSettings) {
     backgroundColor: "#1A2933",
     autoHideMenuBar: true,
     show: false,
-    width: 200,
-    height: 200,
+    width: 425,
+    height: 575,
+    frame: false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,

@@ -50,13 +50,11 @@ function bindFromForm() {
 function bindButtons() {
   var applyBtn = document.getElementById("settings-apply-btn");
   applyBtn.addEventListener("click", (event) => {
-    console.log("Saving");
     ipcRenderer.send("Settings.Dialog.Apply", bindFromForm());
   });
 
   var cancelBtn = document.getElementById("settings-cancel-btn");
   cancelBtn.addEventListener("click", (event) => {
-    console.log("Cancel");
     ipcRenderer.send("Settings.Dialog.Cancel");
   });
 }
