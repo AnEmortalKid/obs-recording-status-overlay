@@ -13,3 +13,11 @@
 #logo-overlay-image.fadeOut {
   opacity: 0.1;
 }
+
+.transparent-bg {
+  background: #1a293300;
+}
+
+.full-bg {
+  background: #1a2933;
+}

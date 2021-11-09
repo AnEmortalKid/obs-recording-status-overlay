@@ -38,3 +38,14 @@ ipcRenderer.on("App.Initialize", (event, overlay) => {
       break;
   }
 });
+
+ipcRenderer.on("App.Background", (event, transparent) => {
+  const root = document.getElementById("root");
+  if (transparent) {
+    root.classList.add("transparent-bg");
+    root.classList.remove("full-bg");
+  } else {
+    root.classList.remove("transparent-bg");
+    root.classList.add("full-bg");
+  }
+});

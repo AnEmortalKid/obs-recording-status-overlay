@@ -4,7 +4,6 @@ const {
   app,
   BrowserWindow,
   Tray,
-  nativeTheme,
   Menu,
   ipcMain,
   MenuItem,
@@ -18,7 +17,6 @@ import {
 } from "./settings/schema";
 
 const path = require("path");
-
 const debug = process.env.DEBUG;
 
 import OBSDispatcher from "./obs/obsDispatcher";
@@ -31,14 +29,8 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
-let tray;
-
 const Store = require("electron-store");
-
 const store = new Store({ schema: schemaDefinition, defaults: schemaDefaults });
-
-// store.set(appSettings);
-console.log(`Settings: ${JSON.stringify(store.store)}`);
 
 const getIcon = () => {
   // if (process.platform === "win32") return "icon-light@2x.ico";
@@ -48,6 +40,7 @@ const getIcon = () => {
 
 const obsDispatcher = new OBSDispatcher(store.get("obs"));
 
+let tray;
 let mainWindow;
 let settingsWindow;
 
@@ -78,9 +71,9 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 200,
     height: 200,
-    backgroundColor: "#1A2933",
     // frame: debug ? debug : true,
     frame: false,
+    transparent: true,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
@@ -151,8 +144,7 @@ app.on("ready", createWindow);
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
-    tray.destroy();
-    app.quit();
+    shutdownApp();
   }
 });
 
@@ -203,6 +195,8 @@ function lockApp() {
   const bounds = mainWindow.getBounds();
   store.set("application.bounds", bounds);
   store.set("application.locked", true);
+
+  mainWindow.webContents.send("App.Background", true);
 }
 
 function unlockApp() {
@@ -211,6 +205,8 @@ function unlockApp() {
   mainWindow.setIgnoreMouseEvents(false);
 
   store.set("application.locked", false);
+
+  mainWindow.webContents.send("App.Background", false);
 }
 
 const updateMenu = () => {
@@ -242,8 +238,7 @@ const updateMenu = () => {
   const quitItem = new MenuItem({
     label: "Quit",
     click() {
-      // TODO store bounds as well?
-      app.quit();
+      shutdownApp();
     },
   });
 
@@ -255,3 +250,8 @@ const updateMenu = () => {
 
   tray.setContextMenu(menu);
 };
+
+function shutdownApp() {
+  tray.destroy();
+  app.quit();
+}

@@ -16,10 +16,14 @@ export default class OBSDispatcher {
    * @returns function that keeps looping
    */
   attemptConnection() {
-    // connected and haven't removed intervalId
-    if (this.obsInternal.isConnected && this.obsInternal.intervalId) {
-      clearInterval(this.obsInternal.intervalId);
-      this.obsInternal.intervalId = null;
+    // connected
+    if (this.obsInternal.isConnected) {
+      // haven't removed intervalId
+      if (this.obsInternal.intervalId) {
+        clearInterval(this.obsInternal.intervalId);
+        this.obsInternal.intervalId = null;
+      }
+
       return;
     }
 
