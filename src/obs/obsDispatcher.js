@@ -18,21 +18,23 @@ export default class OBSDispatcher {
   attemptConnection() {
     // connected
     if (this.obsInternal.isConnected) {
-      // haven't removed intervalId
-      if (this.obsInternal.intervalId) {
-        clearInterval(this.obsInternal.intervalId);
-        this.obsInternal.intervalId = null;
-      }
-
+      this.stopConnectionAttempt();
       return;
     }
 
     this.obsInternal.socket = new OBSWebSocket();
     const obsSocket = this.obsInternal.socket;
+
+    const connectProps = {
+      address: "localhost:" + this.obsSettings.server.port,
+    };
+    const obsPass = this.obsSettings.server.password;
+    if (obsPass && this.obsSettings.server.password !== "") {
+      connectProps.password = obsPass;
+    }
+
     obsSocket
-      .connect({
-        address: "localhost:" + this.obsSettings.server.port,
-      })
+      .connect(connectProps)
       .then(() => {
         console.log(`Success! We're connected & authenticated.`);
         this.obsInternal.isConnected = true;
@@ -69,8 +71,6 @@ export default class OBSDispatcher {
       });
   }
 
-  // TODO connect/disconnect functions
-
   constructor(obsSettings) {
     this.obsSettings = obsSettings;
     this.obsInternal = {
@@ -82,12 +82,36 @@ export default class OBSDispatcher {
     this.listeners = [];
   }
 
-  initialize() {
-    // TODO poll config
+  initialize(newSettings = null) {
+    console.log("obsDispatcher.initialize");
+    if (newSettings) {
+      console.log(`New Settings: ${JSON.stringify(newSettings)}`);
+      this.obsSettings = newSettings;
+      this.stopConnectionAttempt();
+      this.disconnect();
+    }
+
     this.obsInternal.intervalId = setInterval(
       this.attemptConnection.bind(this),
       this.obsSettings.reconnect.intervalMS
     );
+  }
+
+  stopConnectionAttempt() {
+    // haven't removed intervalId
+    if (this.obsInternal.intervalId) {
+      clearInterval(this.obsInternal.intervalId);
+      this.obsInternal.intervalId = null;
+    }
+  }
+
+  disconnect() {
+    this.obsInternal.isConnected = false;
+
+    if (this.obsInternal.obsSocket) {
+      this.obsInternal.obsSocket.disconnect();
+      this.obsInternal.obsSocket = null;
+    }
   }
 
   registerListener(listener) {

@@ -175,7 +175,15 @@ ipcMain.on(SettingsEvents.DIALOG.APPLY, (event, settings) => {
         intervalMS: parseInt(settings.obs.reconnect.intervalMS),
       },
     };
+    const oldObs = store.get("obs");
     store.set("obs", fixedObs);
+
+    if (
+      oldObs.server.port !== fixedObs.server.port ||
+      oldObs.server.password !== fixedObs.server.password
+    ) {
+      obsDispatcher.initialize(fixedObs);
+    }
 
     const oldOverlay = store.get("overlay");
     if (oldOverlay.mode != settings.overlay.mode) {
