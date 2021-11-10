@@ -6,7 +6,7 @@ An overlay that displays the status of [OBS](https://obsproject.com/) recording 
 
 ## Usage
 
-See [usage](./usage) for installation and setup instructions.
+See [usage](./docs/usage.md) for installation and setup instructions.
 
 ## Motivation
 
