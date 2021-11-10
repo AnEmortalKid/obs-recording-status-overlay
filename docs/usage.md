@@ -14,9 +14,12 @@ Due to a bug in [electron](https://github.com/electron/electron/issues/10078) th
 
 ## Settings
 
-1. If you changed the defaults, use the Tray and select _Settings_
+1\. If you changed the defaults, use the Tray and select _Settings_
+
 ![](./images/select_settings.png)
-2. Configure the Port and Password and select _Apply_ (you may have to restart the application if it already connected to OBS)
+
+2\. Configure the Port and Password and select _Apply_ (you may have to restart the application if it already connected to OBS)
+
 ![](./images/settings.png)
 
 ## Application Modes
