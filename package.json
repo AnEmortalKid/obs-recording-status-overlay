@@ -1,13 +1,18 @@
 {
   "name": "obs-status-electron",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "An electron app that displays obs status for recording",
-  "main": "main.js",
+  "hideProp": {
+    "main": "main.js"
+  },
+  "main": "./.webpack/main",
   "scripts": {
     "start": "electron-forge start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "prettier": "./node_modules/.bin/prettier --write .",
+    "prettier:check": "./node_modules/.bin/prettier --check ."
   },
   "author": "Jan",
   "license": "ISC",
@@ -17,37 +22,20 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.61",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
     "@electron-forge/maker-zip": "^6.0.0-beta.61",
-    "electron": "^15.3.0"
+    "@electron-forge/plugin-webpack": "^6.0.0-beta.61",
+    "@vercel/webpack-asset-relocator-loader": "^1.7.0",
+    "copy-webpack-plugin": "^9.0.1",
+    "css-loader": "^6.5.0",
+    "electron": "15.3.0",
+    "node-loader": "^2.0.0",
+    "prettier": "2.4.1",
+    "style-loader": "^3.3.1"
   },
   "dependencies": {
+    "dotenv": "^10.0.0",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^8.0.1",
+    "node-polyfill-webpack-plugin": "^1.1.4",
     "obs-websocket-js": "^4.0.3"
-  },
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "obs_status_electron"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
   }
 }

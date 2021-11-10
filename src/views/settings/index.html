@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Settings</title>
+    <link rel="stylesheet" href="../../css/w3.css" />
+  </head>
+  <body class="w3-text-white">
+      <header class="w3-container" >
+        <div class="w3-center">
+          <h3>Settings</h3>
+        </div>
+      </header>
+      <div id="form-container">
+        <form id="settings-form" class="w3-container">
+
+          <div id="obs-settings" class="w3-section">
+            <h4 class="w3-left"><u>OBS</u></h4>
+            <div class="w3-padding-16">
+            <div id="obs-settings-server" class="w3-container">
+              <div id="obs-settings-port" class="w3-row">
+                <label class="w3-text">Port: </label>
+                <input class="w3-input" type="number" min="1" step="1" id="input-obs.server.port" name="obs.server.port">
+              </div>
+              <div id="obs-settings-password" class="w3-row ">
+                <label class="w3-text">Password:</label>
+                <input class="w3-input" type="text" id="input-obs.server.password" name="obs.server.password">
+              </div>
+            </div>
+            <div id="obs-settings-reconnect" class="w3-container">
+              <div class="w3-row">
+                <label class="w3-text">Interval Seconds:</label>
+                <input class="w3-input" type="number" min="1" step="1" id="input-obs.reconnect.interval" name="obs.reconnect.interval">
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <div id="overlay-settings" class="w3-section">
+            <h4 class="w3-left"><u>Overlay</u></h4>
+            <div class="w3-container">
+              <div class="w3-padding-16">
+              <div id="overlay-settings-mode" class="w3-row">
+                <label class="w3-text">Mode:</label>
+                <select class="w3-select" name="obs.overlay.mode" id="select-obs.overlay.mode">
+                  <option value="timer">Timer</option>
+                  <option value="logo">Logo</option>
+                </select>
+              </div>
+              </div>
+            </div>
+          </div>
+
+          <input type="submit" hidden>
+        </form>
+      </div>
+
+      <footer class="w3-container w3-padding">
+        <div class="w3-bar w3-center">
+          <button class="w3-button w3-round w3-blue-gray" id="settings-apply-btn" >Apply</button>
+          <button  class="w3-button w3-round w3-blue-gray" id="settings-cancel-btn">Close</button>
+        </div>
+      </footer>
+
+      <script src="./settingsEditor.js"></script>
+  </body>
+</html>

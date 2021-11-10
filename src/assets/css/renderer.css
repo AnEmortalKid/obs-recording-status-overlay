@@ -1,0 +1,23 @@
+::-webkit-scrollbar {
+  display: none;
+}
+
+#logo-overlay-image {
+  opacity: 1;
+  -webkit-transition: opacity 0.3s ease-in-out;
+  -moz-transition: opacity 0.3s ease-in-out;
+  -ms-transition: opacity 0.3s ease-in-out;
+  -o-transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3 ease-in-out;
+}
+#logo-overlay-image.fadeOut {
+  opacity: 0.1;
+}
+
+.transparent-bg {
+  background: #1a293300;
+}
+
+.full-bg {
+  background: #1a2933;
+}
